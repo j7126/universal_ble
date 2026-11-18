@@ -3482,8 +3482,12 @@ std::optional<FlutterError> UniversalBlePlugin::SetAutoConnect(bool auto_connect
 std::optional<FlutterError> UniversalBlePlugin::StartAdvertising(
     const flutter::EncodableList &services, const std::string *local_name,
     const int64_t *timeout, const UniversalManufacturerData *manufacturer_data,
-    const PeripheralPlatformConfig *platform_config) {
+    const flutter::EncodableMap *service_data, const PeripheralPlatformConfig *platform_config) {
   std::lock_guard<std::mutex> lock(peripheral_mutex_);
+  if (service_data != nullptr && !service_data->empty()) {
+    return FlutterError("not-supported",
+                        "Windows does not support service data advertising");
+  }
   if (local_name != nullptr) {
     return FlutterError("not-supported",
                         "Windows cannot advertise a local name");

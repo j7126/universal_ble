@@ -209,6 +209,7 @@ class UniversalBlePeripheral {
     String? localName,
     Duration? timeout,
     ManufacturerData? manufacturerData,
+    Map<String, Uint8List>? serviceData,
     PeripheralPlatformConfig? platformConfig,
   }) =>
       _bleCommandQueue.queueCommand(
@@ -217,6 +218,10 @@ class UniversalBlePeripheral {
           localName: localName,
           timeout: timeout,
           manufacturerData: manufacturerData,
+          serviceData: serviceData != null
+              ? Map.from(serviceData)
+                  .map((key, value) => MapEntry(BleUuidParser.string(key), value))
+              : null,
           platformConfig: platformConfig,
         ),
         timeout: timeout,

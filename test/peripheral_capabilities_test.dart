@@ -32,7 +32,7 @@ void main() {
     TargetPlatform.macOS,
     TargetPlatform.windows,
   ]) {
-    test('manufacturer capability on $platform', () async {
+    test('advertisement capabilities on $platform', () async {
       debugDefaultTargetPlatformOverride = platform;
       final capabilities =
           await UniversalBlePeripheralPigeon.instance.getCapabilities();
@@ -40,11 +40,20 @@ void main() {
           capabilities.supportsManufacturerDataInAdvertisement,
           platform == TargetPlatform.android ||
               platform == TargetPlatform.windows);
+      expect(
+        capabilities.supportsServiceDataInAdvertisement,
+        platform == TargetPlatform.android,
+      );
       readiness = PeripheralReadinessState.unsupported;
       expect(
           (await UniversalBlePeripheralPigeon.instance.getCapabilities())
               .supportsManufacturerDataInAdvertisement,
           isFalse);
+      expect(
+        (await UniversalBlePeripheralPigeon.instance.getCapabilities())
+            .supportsServiceDataInAdvertisement,
+        isFalse,
+      );
     });
   }
 }

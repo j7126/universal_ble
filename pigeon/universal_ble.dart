@@ -675,6 +675,7 @@ abstract class UniversalBlePeripheralChannel {
     String? localName,
     int? timeout,
     UniversalManufacturerData? manufacturerData,
+    Map<String, Uint8List>? serviceData,
     PeripheralPlatformConfig? platformConfig,
   );
 

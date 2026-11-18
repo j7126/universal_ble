@@ -50,6 +50,8 @@ class UniversalBlePeripheralPigeon extends UniversalBlePeripheralPlatform
         defaultTargetPlatform == TargetPlatform.android;
     final supportsAdvertisingTimeout =
         defaultTargetPlatform == TargetPlatform.android;
+    final supportsServiceDataInAdvertisement =
+        defaultTargetPlatform == TargetPlatform.android;
     return BlePeripheralCapabilities(
       supportsPeripheralMode: supported,
       supportsManufacturerDataInAdvertisement: supported &&
@@ -57,7 +59,8 @@ class UniversalBlePeripheralPigeon extends UniversalBlePeripheralPlatform
               defaultTargetPlatform == TargetPlatform.windows),
       supportsManufacturerDataInScanResponse:
           supported && supportsManufacturerDataInScanResponse,
-      supportsServiceDataInAdvertisement: false,
+      supportsServiceDataInAdvertisement:
+          supported && supportsServiceDataInAdvertisement,
       supportsServiceDataInScanResponse: false,
       supportsTargetedCharacteristicUpdate: supported,
       supportsAdvertisingTimeout: supported && supportsAdvertisingTimeout,
@@ -109,6 +112,7 @@ class UniversalBlePeripheralPigeon extends UniversalBlePeripheralPlatform
     String? localName,
     Duration? timeout,
     ManufacturerData? manufacturerData,
+    Map<String, Uint8List>? serviceData,
     PeripheralPlatformConfig? platformConfig,
   }) async {
     await _ensureBluetoothAdvertisePermission();
@@ -117,6 +121,7 @@ class UniversalBlePeripheralPigeon extends UniversalBlePeripheralPlatform
       localName,
       timeout?.inMilliseconds,
       manufacturerData?.toUniversalManufacturerData(),
+      serviceData,
       platformConfig,
     );
   }

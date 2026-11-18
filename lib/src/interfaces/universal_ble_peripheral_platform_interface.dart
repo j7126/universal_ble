@@ -74,6 +74,7 @@ abstract class UniversalBlePeripheralPlatform {
     String? localName,
     Duration? timeout,
     ManufacturerData? manufacturerData,
+    Map<String, Uint8List>? serviceData,
     PeripheralPlatformConfig? platformConfig,
   });
 
@@ -230,6 +231,7 @@ class UniversalBlePeripheralUnsupported extends UniversalBlePeripheralPlatform {
     String? localName,
     Duration? timeout,
     ManufacturerData? manufacturerData,
+    Map<String, Uint8List>? serviceData,
     PeripheralPlatformConfig? platformConfig,
   }) async {
     throw _notSupported();

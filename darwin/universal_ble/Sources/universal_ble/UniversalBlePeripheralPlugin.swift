@@ -276,6 +276,7 @@ final class UniversalBlePeripheralPlugin: NSObject, UniversalBlePeripheralChanne
     localName: String?,
     timeout: Int64?,
     manufacturerData: UniversalManufacturerData?,
+    serviceData: [String: FlutterStandardTypedData]?,
     platformConfig: PeripheralPlatformConfig?
   ) throws {
     if let timeout, timeout > 0 {
@@ -283,6 +284,13 @@ final class UniversalBlePeripheralPlugin: NSObject, UniversalBlePeripheralChanne
         domain: "UniversalBlePeripheral",
         code: -1,
         userInfo: [NSLocalizedDescriptionKey: "Advertising timeout is not supported on Darwin."]
+      )
+    }
+    if let serviceData, !serviceData.isEmpty {
+      throw NSError(
+        domain: "UniversalBlePeripheral",
+        code: -1,
+        userInfo: [NSLocalizedDescriptionKey: "Service data advertising is not supported on Darwin."]
       )
     }
     let cbServices = services.map(Self.advertisingServiceUuid)

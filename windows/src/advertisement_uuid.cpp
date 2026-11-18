@@ -8,9 +8,9 @@ namespace universal_ble {
 
 namespace {
 
-// Formats the 16 little-endian bytes as the canonical lower-case UUID string:
-// the whole 16 bytes are reversed (the last byte on air is the first in the
-// string), then grouped 4-2-2-2-6.
+/// Formats the 16 little-endian bytes as the canonical lower-case UUID string:
+/// the whole 16 bytes are reversed (the last byte on air is the first in the
+/// string), then grouped 4-2-2-2-6.
 std::string Format128BitUuid(const std::vector<uint8_t> &uuid_bytes) {
   char uuid_str[37];
   std::snprintf(uuid_str, sizeof(uuid_str),

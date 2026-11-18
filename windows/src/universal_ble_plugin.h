@@ -680,6 +680,7 @@ private:
       const flutter::EncodableList &services, const std::string *local_name,
       const int64_t *timeout,
       const UniversalManufacturerData *manufacturer_data,
+      const flutter::EncodableMap *service_data,
       const PeripheralPlatformConfig *platform_config) override;
   std::optional<FlutterError> UpdateCharacteristic(
       const std::string &characteristic_id, const std::string *characteristic_instance_id,

@@ -1096,6 +1096,60 @@ if (advertisingState == PeripheralAdvertisingState.advertising) {
 await UniversalBlePeripheral.stopAdvertising();
 ```
 
+### Advertising Service Data
+
+On **Android**, you can include [Service Data](https://www.bluetooth.com/specifications/assigned-numbers/) in the advertisement packet. This field advertises a service UUID together with an application-specific payload, useful for beacons like Eddystone (`0xFEAA`) or thermometer data.
+
+Service data is normalized to full 128-bit UUIDs; both short (`181A`) and `0x`-prefixed forms are accepted. Payload bytes are preserved verbatim.
+
+```dart
+import 'dart:typed_data';
+import 'package:universal_ble/universal_ble.dart';
+
+final caps = await UniversalBlePeripheral.getCapabilities();
+
+// Android: advertise custom thermometer service data
+const thermometerServiceUuid = '12345678-9abc-def0-1234-567890abcdef';
+final serviceData = caps.supportsServiceDataInAdvertisement
+    ? {
+        thermometerServiceUuid: Uint8List.fromList([
+          0x42, // Temperature: 66°C
+          0x65, // Humidity: 101%
+        ]),
+      }
+    : null;
+
+await UniversalBlePeripheral.startAdvertising(
+  services: [thermometerServiceUuid],
+  serviceData: serviceData,
+  localName: 'MyThermometer',
+);
+```
+
+A central scanning for the same UUID can discover the service data:
+
+```dart
+// Central side: discover peripherals advertising the service data
+UniversalBle.startScan(
+  scanFilter: ScanFilter(
+    withServiceData: ['12345678-9abc-def0-1234-567890abcdef'],
+  ),
+);
+
+UniversalBle.onScanResult.listen((device) {
+  final serviceData = device.serviceData;
+  if (serviceData != null &&
+      serviceData.containsKey('12345678-9abc-def0-1234-567890abcdef')) {
+    final payload = serviceData['12345678-9abc-def0-1234-567890abcdef']!;
+    print('Temperature: ${payload[0]}°C, Humidity: ${payload[1]}%');
+  }
+});
+```
+
+**Platform limitations:**
+- **Android:** Service data is included in the primary advertisement packet. The legacy 31-byte limit applies; use concise payloads.
+- **Windows, iOS, macOS, and Linux:** Do not support service data in `startAdvertising` and reject non-empty `serviceData` with an error. Check `getCapabilities().supportsServiceDataInAdvertisement` before attempting to use this feature.
+
 ### Request Handlers
 
 Register read/write handlers separately. Return `null` to let the stack use the characteristic's configured or per-client value (including a CCCD, which is tracked per client and defaults to disabled).

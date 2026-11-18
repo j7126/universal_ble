@@ -197,6 +197,7 @@ class UniversalBlePeripheralPlugin(
         localName: String?,
         timeout: Long?,
         manufacturerData: UniversalManufacturerData?,
+        serviceData: Map<String, ByteArray>?,
         platformConfig: PeripheralPlatformConfig?,
     ) {
         if (!hasRequiredPermissions()) {
@@ -271,6 +272,11 @@ class UniversalBlePeripheralPlugin(
             val servicesBuilder =
                 if (addServicesInScanResponse) scanResponseBuilder else advertiseDataBuilder
             services.forEach { servicesBuilder.addServiceUuid(ParcelUuid.fromString(it)) }
+
+            // Add service data to primary advertisement
+            serviceData?.forEach { (uuid, payload) ->
+                advertiseDataBuilder.addServiceData(ParcelUuid.fromString(uuid), payload)
+            }
 
             bluetoothLeAdvertiser?.startAdvertising(
                 advertiseSettings,

@@ -37,6 +37,7 @@ class MockPeripheralPlatform extends Fake implements UniversalBlePeripheralPlatf
     String? localName,
     Duration? timeout,
     dynamic manufacturerData,
+    Map<String, Uint8List>? serviceData,
     dynamic platformConfig,
   }) async {
     callLog.add('startAdvertising');

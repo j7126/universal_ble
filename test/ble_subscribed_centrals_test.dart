@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:universal_ble/universal_ble.dart';
@@ -55,6 +56,7 @@ class _MockPeripheralPlatform extends UniversalBlePeripheralPlatform {
     String? localName,
     Duration? timeout,
     ManufacturerData? manufacturerData,
+    Map<String, Uint8List>? serviceData,
     PeripheralPlatformConfig? platformConfig,
   }) async {}
 
